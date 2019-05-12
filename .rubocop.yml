@@ -1,0 +1,6 @@
+Style/EmptyMethod:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false

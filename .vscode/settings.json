@@ -1,0 +1,9 @@
+// Basic settings: turn linter(s) on
+{
+    "ruby.lint": {
+        "rubocop": true,
+        "ruby": true //Runs ruby -wc
+    },
+    "editor.tabSize": 2,
+    "files.trimFinalNewlines": true
+}
