@@ -4,7 +4,6 @@
 require 'nokogiri'
 
 module PhotoManagement
-
   class Photo
     attr_reader :jpeg
     attr_reader :raw
@@ -19,12 +18,20 @@ module PhotoManagement
           File.basename(xmp.file_name, '.*') + '.jpg'
         )
       )
+      @raw = RawFile(
+        File.join(
+          File.dirname(xmp.file_name),
+          xmp.source_file_name
+        )
+      )
     end
 
     def rendered?
+      jpeg.exist?
     end
 
     def needs_rendering?
+      xmp.updated_at > jpeg.updated_at
     end
   end
   class JpegFile
@@ -37,9 +44,23 @@ module PhotoManagement
     def exist?
       File.exist? file_name
     end
+
+    def updated_at
+      return false unless exist?
+
+      File.mtime(file_name)
+    end
   end
 
   class RawFile
-  end
+    attr_reader :file_name
 
+    def initialize(raw_file)
+      @file_name = raw_file
+    end
+
+    def exist?
+      File.exist? file_name
+    end
+  end
 end

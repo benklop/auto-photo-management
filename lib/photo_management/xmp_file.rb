@@ -33,12 +33,12 @@ module PhotoManagement
       colors.none? { |color| color == :blue }
     end
 
-    def render_file_name
-      @xmp.xpath('//')
-    end
-
     def source_file_name
       @xmp.at_xpath('//rdf:Description/@xmpMM:DerivedFrom', NAMESPACES).value
+    end
+
+    def updated_at
+      File.mtime(file_name)
     end
 
     def colors
