@@ -47,7 +47,6 @@ module PhotoManagement
     end
   end
 
-
   class JpegFile
     attr_reader :file_name
 

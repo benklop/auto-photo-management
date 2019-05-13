@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+class PhotoMgrCLI < Thor
+  desc "scan FOLDER", "Scan all XMPs in FOLDER, rendering those that are out of date."
+  def scan(folder)
+    puts "Scanning for XMPs that need updating in #{folder} ..."
+
+
+  end
+end
