@@ -25,6 +25,11 @@ module PhotoManagement
       @file_name = xmp_file
     end
 
+    def type
+      return :darktable if @xmp.at_xpath('//rdf:Description', NAMESPACES).namespaces.include? 'xmlns:darktable'
+      false
+    end
+
     def ready_for_rendering?
       colors.any? { |color| color == :green }
     end

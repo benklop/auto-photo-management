@@ -2,28 +2,36 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
+require_relative 'photo_management/xmp_file'
+require_relative 'photo_management/darktable'
 
 module PhotoManagement
   class Photo
     attr_reader :jpeg
     attr_reader :raw
     attr_reader :xmp
+    attr_reader :renderer
 
     def initialize(xmp_file, relative_render_folder = '../processed')
-      @xmp = XMPFile(xmp_file)
-      @jpeg = JpegFile(
+
+      @xmp = XMPFile.new(xmp_file)
+
+      @jpeg = JpegFile.new(
         File.join(
           File.dirname(xmp.file_name),
           relative_render_folder,
           File.basename(xmp.file_name, '.*') + '.jpg'
         )
       )
-      @raw = RawFile(
+
+      @raw = RawFile.new(
         File.join(
           File.dirname(xmp.file_name),
           xmp.source_file_name
         )
       )
+
+      @renderer = Darktable if xmp.type == :darktable
     end
 
     def rendered?
@@ -33,7 +41,13 @@ module PhotoManagement
     def needs_rendering?
       xmp.updated_at > jpeg.updated_at
     end
+
+    def render
+      renderer.render(xmp.file_name, raw.file_name, jpeg.file_name)
+    end
   end
+
+
   class JpegFile
     attr_reader :file_name
 
