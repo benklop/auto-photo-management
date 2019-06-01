@@ -27,12 +27,16 @@ module PhotoManagement
       false
     end
 
-    def ready_for_rendering?
+    def tagged_ready_for_rendering?
       colors.any? { |color| color == :green }
     end
 
-    def for_personal_use?
+    def tagged_for_personal_use?
       colors.none? { |color| color == :blue }
+    end
+
+    def tagged_for_prints?
+      colors.any? { |color| color == :blue }
     end
 
     def source_file_name

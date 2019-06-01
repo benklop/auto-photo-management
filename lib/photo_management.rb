@@ -1,6 +1,3 @@
-#!/usr/bin/env ruby
-# frozen_string_literal: true
-
 require 'nokogiri'
 require_relative 'photo_management/xmp_file'
 require_relative 'photo_management/darktable'
@@ -39,7 +36,7 @@ module PhotoManagement
     end
 
     def needs_rendering?
-      xmp.updated_at > jpeg.updated_at
+      xmp.tagged_ready_for_rendering? && xmp.updated_at > jpeg.updated_at
     end
 
     def render
@@ -62,6 +59,17 @@ module PhotoManagement
       return false unless exist?
 
       File.mtime(file_name)
+    end
+
+    def link_to(folder)
+      folder_name = PhotoManagement::Config.config[folder]
+
+      #need to determine folder structure differently, as per processed_linker.sh
+      dest_name = File.join(folder_name,File.basename(file_name))
+
+      File.unlink(dest_name) if File.exist?(dest_name)
+      File.link(dest_name, file_name)
+
     end
   end
 
