@@ -1,6 +1,7 @@
 require 'nokogiri'
 require_relative 'photo_management/xmp_file'
 require_relative 'photo_management/darktable'
+require_relative 'photo_management/folder'
 
 module PhotoManagement
   class Photo
@@ -64,8 +65,8 @@ module PhotoManagement
     def link_to(folder)
       folder_name = PhotoManagement::Config.config[folder]
 
-      #need to determine folder structure differently, as per processed_linker.sh
-      dest_name = File.join(folder_name,File.basename(file_name))
+      # need to determine folder structure differently, as per processed_linker.sh
+      dest_name = File.join(folder_name, File.basename(file_name))
 
       File.unlink(dest_name) if File.exist?(dest_name)
       File.link(dest_name, file_name)

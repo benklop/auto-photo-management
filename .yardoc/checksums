@@ -1,0 +1,4 @@
+lib/photo_management.rb 3af4326d53c7cd51047205631babc9d37aa5f569
+lib/photo_management/folder.rb b1d2315f41c8a747a5fd28de7466b277a75e81a7
+lib/photo_management/xmp_file.rb a6280a78214b790a05998a4a871070116a2b1af4
+lib/photo_management/darktable.rb a5cd60bf2d9aac85fed0a619fa380bb82ecf1485

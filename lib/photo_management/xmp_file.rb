@@ -24,6 +24,7 @@ module PhotoManagement
 
     def type
       return :darktable if @xmp.at_xpath('//rdf:Description', NAMESPACES).namespaces.include? 'xmlns:darktable'
+
       false
     end
 
