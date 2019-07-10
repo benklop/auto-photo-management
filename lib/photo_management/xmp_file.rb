@@ -6,17 +6,23 @@ module PhotoManagement
       'xmpMM' => 'http://ns.adobe.com/xap/1.0/mm/'
     }.freeze
     COLORS = {
-      '0': :red,
-      '1': :yellow,
-      '2': :green,
-      '3': :blue,
-      '4': :magenta
+      '0' => :red,
+      '1' => :yellow,
+      '2' => :green,
+      '3' => :blue,
+      '4' => :magenta
+    }.freeze
+    ACTIONS = {
+      red: 'Intermediate',
+      green: 'Processed',
+      blue: 'Stock',
+      magenta: 'Prints'
     }.freeze
     attr_reader :xmp
     attr_reader :file_name
 
     def initialize(xmp_file)
-      raise "#{xmp_file} is not an XMP file!" unless File.extname(xmp_file).downcase == 'xmp'
+      raise "#{xmp_file} is not an XMP file!" unless File.extname(xmp_file).downcase == '.xmp'
 
       @xmp = File.open(xmp_file) { |f| Nokogiri::XML(f) }
       @file_name = xmp_file
@@ -29,15 +35,19 @@ module PhotoManagement
     end
 
     def tagged_ready_for_rendering?
-      colors.any? { |color| color == :green }
+      colors.any? { |color| ACTIONS[color] == 'Processed' }
     end
 
-    def tagged_for_personal_use?
-      colors.none? { |color| color == :blue }
+    def tagged_for_stock?
+      colors.any? { |color| ACTIONS[color] == 'Stock' }
     end
 
-    def tagged_for_prints?
-      colors.any? { |color| color == :blue }
+    def tagged_for_print?
+      colors.any? { |color| ACTIONS[color] == 'Prints' }
+    end
+
+    def tagged_for_intermediate?
+      colors.any? { |color| ACTIONS[color] == 'Intermediate' }
     end
 
     def source_file_name

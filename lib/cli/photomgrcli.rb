@@ -10,15 +10,16 @@ class PhotoMgrCLI < Thor
   def scan
     puts "Scanning for XMPs that need updating in #{options[:folder]} ..."
 
-    file_names = PhotoManagement::Folder.scan(options[:folder])
-    photos = file_names.map { |file_name| PhotoManagment::Photo.new(file_name) }
-    photos.each do |photo|
-      photo.render if photo.needs_rendering?
+    PhotoManagement::Folder.scan(options[:folder]).each do |file_name|
+      photo = PhotoManagement::Photo.new(file_name)
+      photo.render(:jpeg) if photo.needs_rendering?
+      photo.render(:intermediate) if photo.needs_intermediate?
+      photo.render(:print) if photo.needs_print?
+
       next unless photo.rendered?
 
-      # link to the processed folder always
-      photo.jpeg.link_to(:processed) if photo.rendered? && photo.xmp.tagged_for_personal_use?
-      photo.jpeg.link_to(:prints) if photo.xmp.tagged_for_prints?
+      photo.jpeg.link_to(:global_processed)
+      photo.jpeg.link_to(:global_stock) if photo.xmp.tagged_for_stock?
     end
   end
 end
