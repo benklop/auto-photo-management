@@ -5,7 +5,7 @@ source "https://rubygems.org"
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem "watchman", "~> 0.1.1"
-gem "nokogiri", "~> 1.10"
+gem "nokogiri", "~> 1.11"
 
 group :cli do
   gem "thor", "~> 0.20.3"
